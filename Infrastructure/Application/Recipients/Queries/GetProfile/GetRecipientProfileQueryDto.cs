@@ -9,6 +9,11 @@ namespace Infrastructure.Application.Recipients.Queries.GetProfile
 {
     public class GetRecipientProfileQueryDto
     {
+        public string FirstName { get; set; }
+        public string MiddleName { get; set; }
+        public string LastName { get; set; }
+        public string Country { get; set; }
+        public string Email { get; set; }
         public string NationalId { get; set; }
         public string? NationalIdUrl { get; set; }
         public string? Story { get; set; }
@@ -25,7 +30,7 @@ namespace Infrastructure.Application.Recipients.Queries.GetProfile
         public string? GoFundMeLink { get; set; }
         public bool IsVerified { get; set; }
         public RecipientStatus Status { get; set; }
-        public ICollection<string> Images { get; set; }
+        public List<string> Images { get; set; }
         public List<RecipientContactDto> Contacts { get; set; }
         public List<RecipientPaymentMethodDto> PaymentMethods { get; set; }
     }
