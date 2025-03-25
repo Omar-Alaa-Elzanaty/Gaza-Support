@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.Application.Donors.Queries
+﻿namespace Infrastructure.Application.Donors.Queries.GetRecipient
 {
     public class GetRecipientQueryDto
     {

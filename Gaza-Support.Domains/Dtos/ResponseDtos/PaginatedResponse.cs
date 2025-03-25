@@ -43,7 +43,7 @@ namespace Gaza_Support.Domains.Dtos.ResponseDtos
             return new PaginatedResponse<T>(true, data, null, null, count, HttpStatusCode.OK, pageNumber, pageSize);
         }
 
-        public static async Task<PaginatedResponse<T>> FailureAsync(string message, HttpStatusCode statusCode)
+        public static PaginatedResponse<T> Failure(string message, HttpStatusCode statusCode = HttpStatusCode.BadRequest)
         {
             return new PaginatedResponse<T>()
             {

@@ -9,11 +9,12 @@ using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver;
 using System.Security.Claims;
 
-namespace Infrastructure.Application.Donors.Commands
+namespace Infrastructure.Application.Donors.Commands.CreateDonation
 {
     public class CreateDonationCommand : IRequest<BaseResponse<string>>
     {
         public string RecipientId { get; set; }
+        public double Amount { get; set; }
         public MediaFileDto DonationInvoiceImage { get; set; }
         public string? Note { get; set; }
     }
@@ -44,7 +45,7 @@ namespace Infrastructure.Application.Donors.Commands
 
             var donation = command.Adapt<Donation>();
             donation.DonorId = userId;
-            donation.CreationDate = DateTime.UtcNow;
+            donation.CreatedAt = DateTime.UtcNow;
 
             await _unitOfWork.DonationRepo.AddAsync(donation);
 

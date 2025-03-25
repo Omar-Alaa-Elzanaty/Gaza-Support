@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Application.Donors.Commands
+namespace Infrastructure.Application.Donors.Commands.CreateDonation
 {
     public class CreateDonationCommandValidator:AbstractValidator<CreateDonationCommand>
     {

@@ -1,19 +1,22 @@
 ﻿using DataAccess.Interface;
 using Gaza_Support.Domains.Contstants;
 using Gaza_Support.Domains.Dtos.ResponseDtos;
+using Infrastructure.Extensions;
 using Mapster;
 using MediatR;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 
-namespace Infrastructure.Application.Donors.Queries
+namespace Infrastructure.Application.Donors.Queries.GetRecipient
 {
-    public class GetRecipientQuery : IRequest<BaseResponse<List<GetRecipientQueryDto>>>
+    public class GetRecipientQuery : IRequest<PaginatedResponse<GetRecipientQueryDto>>
     {
+        public int PageNumber { get; set; } = 1;
+        public int PageSize { get; set; } = 10;
         public bool SortAscendingOnSubscribeDonation { get; set; }
     }
 
-    internal class GetRecipientQueryHandler : IRequestHandler<GetRecipientQuery, BaseResponse<List<GetRecipientQueryDto>>>
+    internal class GetRecipientQueryHandler : IRequestHandler<GetRecipientQuery, PaginatedResponse<GetRecipientQueryDto>>
     {
         private readonly IunitOfWork _unitOfWork;
 
@@ -22,7 +25,7 @@ namespace Infrastructure.Application.Donors.Queries
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<BaseResponse<List<GetRecipientQueryDto>>> Handle(GetRecipientQuery request, CancellationToken cancellationToken)
+        public async Task<PaginatedResponse<GetRecipientQueryDto>> Handle(GetRecipientQuery query, CancellationToken cancellationToken)
         {
             var roleId = await _unitOfWork.RoleRepo.Collection
                         .Find(x => x.Name == Roles.Recipient)
@@ -31,11 +34,11 @@ namespace Infrastructure.Application.Donors.Queries
 
             if (roleId == null)
             {
-                return BaseResponse<List<GetRecipientQueryDto>>.Failure("Role not found");
+                return PaginatedResponse<GetRecipientQueryDto>.Failure("Role not found.");
             }
 
             var entities = _unitOfWork.RecipientRepo.Collection.AsQueryable()
-                .Where(x => x.RoleId == roleId)
+                .Where(x => x.RoleId == roleId && x.IsVerified)
                 .GroupJoin(_unitOfWork.SubscribeRepo.Collection.AsQueryable(),
                     recipient => recipient.Id,
                     subscribe => subscribe.SubscribeId,
@@ -49,7 +52,7 @@ namespace Infrastructure.Application.Donors.Queries
                         Count = x.subscribes.Count()
                     });
 
-            if (request.SortAscendingOnSubscribeDonation)
+            if (query.SortAscendingOnSubscribeDonation)
             {
                 entities = entities.OrderBy(x => x.Count);
             }
@@ -61,9 +64,9 @@ namespace Infrastructure.Application.Donors.Queries
 
             var recipients = await entities
                             .ProjectToType<GetRecipientQueryDto>()
-                            .ToListAsync(cancellationToken);
+                            .ToPaginatedListAsync(query.PageNumber, query.PageSize, cancellationToken);
 
-            return BaseResponse<List<GetRecipientQueryDto>>.Success(recipients);
+            return recipients;
         }
     }
 }

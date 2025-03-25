@@ -1,5 +1,6 @@
 ﻿using Gaza_Support.Domains.Dtos.ResponseDtos;
 using Infrastructure.Application.Recipients.Commands.CompleteProfile;
+using Infrastructure.Application.Recipients.Queries.GetDonationsWithPagination;
 using Infrastructure.Application.Recipients.Queries.GetDonors;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -27,6 +28,12 @@ namespace Gaza_Support.API.EndPoints
         public async Task<ActionResult<BaseResponse<List<GetDonorsQueryDto>>>> GetDonors()
         {
             return await _mediator.Send(new GetDonorsQuery());
+        }
+
+        [HttpGet("donotions/pages")]
+        public async Task<ActionResult<PaginatedResponse<GetDonationsWithPaginationQueryDto>>> GetDonotions([FromQuery] GetDonationsWithPaginationQuery query)
+        {
+            return await _mediator.Send(query);
         }
     }
 }

@@ -25,18 +25,18 @@ namespace DataAccess.Repo
 
         public async Task DeleteAsync(Donation entity)
         {
-            await _donationCollection.DeleteOneAsync(x => x.Id == entity.Id);
+            await _donationCollection.DeleteOneAsync(x => x.DonorId==entity.DonorId&&x.RecipientId==entity.RecipientId);
         }
 
-        public async Task<Donation?> FindOneByAsync(string id)
+        public async Task<Donation?> FindOneByAsync(Donation entity)
         {
-            var data = await _donationCollection.FindAsync(x => x.Id == id);
+            var data = await _donationCollection.FindAsync(x => x.DonorId == entity.DonorId && x.RecipientId == entity.RecipientId);
             return await data.FirstOrDefaultAsync();
         }
 
         public async Task ReplaceAsync(Donation entity)
         {
-            await _donationCollection.ReplaceOneAsync(x => x.Id == entity.Id, entity);
+            await _donationCollection.ReplaceOneAsync(x => x.DonorId == entity.DonorId && x.RecipientId == entity.RecipientId, entity);
         }
     }
 }
