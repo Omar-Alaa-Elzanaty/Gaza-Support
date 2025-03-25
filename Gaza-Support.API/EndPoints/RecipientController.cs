@@ -3,6 +3,7 @@ using Infrastructure.Application.Recipients.Commands.CompleteProfile;
 using Infrastructure.Application.Recipients.Commands.MarkDonationAsRead;
 using Infrastructure.Application.Recipients.Queries.GetDonationsWithPagination;
 using Infrastructure.Application.Recipients.Queries.GetDonors;
+using Infrastructure.Application.Recipients.Queries.GetProfile;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -41,6 +42,12 @@ namespace Gaza_Support.API.EndPoints
         public async Task<ActionResult<BaseResponse<string>>> MarkDonotionAsRead([FromBody] MarkDonationAsReadCommand command)
         {
             return StatusCode(await _mediator.Send(command));
+        }
+
+        [HttpGet("profile")]
+        public async Task<ActionResult<BaseResponse<GetRecipientProfileQueryDto>>> GetProfile()
+        {
+            return StatusCode(await _mediator.Send(new GetRecipientProfileQuery()));
         }
     }
 }

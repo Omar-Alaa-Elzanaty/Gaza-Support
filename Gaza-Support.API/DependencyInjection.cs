@@ -11,7 +11,7 @@ namespace Gaza_Support.API
         {
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "PSolve API", Version = "v1.0" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Gaza-Support API", Version = "v1.0" });
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     In = ParameterLocation.Header,
