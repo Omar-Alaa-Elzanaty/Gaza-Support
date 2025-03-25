@@ -1,5 +1,6 @@
 ﻿using Gaza_Support.Domains.Dtos.ResponseDtos;
 using Infrastructure.Application.Recipients.Commands.CompleteProfile;
+using Infrastructure.Application.Recipients.Commands.MarkDonationAsRead;
 using Infrastructure.Application.Recipients.Queries.GetDonationsWithPagination;
 using Infrastructure.Application.Recipients.Queries.GetDonors;
 using MediatR;
@@ -21,19 +22,25 @@ namespace Gaza_Support.API.EndPoints
         [HttpPut("profile")]
         public async Task<ActionResult<BaseResponse<string>>> CompleteProfile([FromBody] CompleteProfileCommand command)
         {
-            return await _mediator.Send(command);
+            return StatusCode(await _mediator.Send(command));
         }
 
         [HttpGet("donors")]
         public async Task<ActionResult<BaseResponse<List<GetDonorsQueryDto>>>> GetDonors()
         {
-            return await _mediator.Send(new GetDonorsQuery());
+            return StatusCode(await _mediator.Send(new GetDonorsQuery()));
         }
 
         [HttpGet("donotions/pages")]
         public async Task<ActionResult<PaginatedResponse<GetDonationsWithPaginationQueryDto>>> GetDonotions([FromQuery] GetDonationsWithPaginationQuery query)
         {
-            return await _mediator.Send(query);
+            return StatusCode(await _mediator.Send(query));
+        }
+
+        [HttpPut("donotions/markAsRead")]
+        public async Task<ActionResult<BaseResponse<string>>> MarkDonotionAsRead([FromBody] MarkDonationAsReadCommand command)
+        {
+            return StatusCode(await _mediator.Send(command));
         }
     }
 }

@@ -5,6 +5,6 @@ namespace DataAccess.Interface
 {
     public interface IDonationRepo : IBaseRepo<Donation>
     {
-        Task<Donation?> FindOneByAsync(Donation entity);
+        Task<Donation?> FindOneByAsync(string id);
     }
 }

@@ -6,6 +6,7 @@ using Mapster;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Security.Claims;
 
@@ -45,6 +46,7 @@ namespace Infrastructure.Application.Donors.Commands.CreateDonation
 
             var donation = command.Adapt<Donation>();
             donation.DonorId = userId;
+            donation.Id = ObjectId.GenerateNewId().ToString();
             donation.CreatedAt = DateTime.UtcNow;
 
             await _unitOfWork.DonationRepo.AddAsync(donation);

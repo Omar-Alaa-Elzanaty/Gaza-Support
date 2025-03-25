@@ -14,7 +14,7 @@ namespace Gaza_Support.API.EndPoints
 
         public AuthenticationController(IMediator mediator)
         {
-            this._mediator = mediator;
+            _mediator = mediator;
         }
 
         [HttpPost("register-donor")]
